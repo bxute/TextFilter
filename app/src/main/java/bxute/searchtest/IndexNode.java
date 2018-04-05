@@ -18,11 +18,11 @@ public class IndexNode {
     @SerializedName("nextNodes")
     HashMap<String, IndexNode> nextIndexs;
     @SerializedName("listOfWords")
-    ArrayList<String> listOfWords;
+    ArrayList<Integer> indexOfWords;
 
     public IndexNode(String character) {
         this.character = character;
-        listOfWords = new ArrayList<>();
+        indexOfWords = new ArrayList<>();
         nextIndexs = new HashMap<>();
     }
 
@@ -30,16 +30,16 @@ public class IndexNode {
         nextIndexs.put(indexNode.getCharacter(), indexNode);
     }
 
-    public void addWord(String word) {
-        listOfWords.add(word);
+    public void addWord(int wordIndex) {
+        indexOfWords.add(wordIndex);
     }
 
     public String getCharacter() {
         return character;
     }
 
-    public ArrayList<String> getListOfWords() {
-        return listOfWords;
+    public ArrayList<Integer> getListOfWordIndexs() {
+        return indexOfWords;
     }
 
     public boolean hasNodeWith(String currentCharacter) {
@@ -55,7 +55,7 @@ public class IndexNode {
         return "IndexNode{" +
                 "character='" + character + '\'' +
                 ", nextIndexs=" + getJson(nextIndexs) +
-                ", listOfWords=" + listOfWords +
+                ", listOfWords=" + indexOfWords +
                 '}';
     }
 
