@@ -16,23 +16,23 @@ public class IndexTreeBuilder {
 
     @SerializedName("tree")
     HashMap<String, IndexNode> tree;
-    private ArrayList<String> words;
+    private ArrayList<String> wordBase;
     String currentWord = null;
     String currentCharacter = null;
     IndexNode currentNode = null;
 
     public IndexTreeBuilder(ArrayList<String> words) {
         this.tree = new HashMap<>();
-        this.words = words;
+        this.wordBase = words;
     }
 
     public HashMap<String, IndexNode> buildTree() {
 
         int wordLen;
-        // i is index of word in list of words
-        for (int wordIndex = 0; wordIndex < words.size(); wordIndex++) {
+        // i is index of word in list of wordBase
+        for (int wordIndex = 0; wordIndex < wordBase.size(); wordIndex++) {
 
-            currentWord = words.get(wordIndex);
+            currentWord = wordBase.get(wordIndex);
             p("Current Word: " + currentWord);
             wordLen = currentWord.length();
 
@@ -51,7 +51,7 @@ public class IndexTreeBuilder {
                        // p(currentCharacter + " - exists [Getting Old Node]");
                         //TODO: 3/8/2018  get node from tree, add word and make it current Node
                         IndexNode oldNode = tree.get(currentCharacter);
-                        oldNode.addWord(currentWord);
+                        oldNode.addWord(wordIndex);
                         currentNode = oldNode;
 
                     } else {
@@ -59,7 +59,7 @@ public class IndexTreeBuilder {
                         // create new node
                         currentNode = new IndexNode(currentCharacter);
                         // add word
-                        currentNode.addWord(currentWord);
+                        currentNode.addWord(wordIndex);
                         // add this to tree
                         tree.put(currentCharacter, currentNode);
                     }
@@ -73,23 +73,19 @@ public class IndexTreeBuilder {
                         // get old node
                         IndexNode oldNode = currentNode.getNode(currentCharacter);
                         //add word to this
-                        oldNode.addWord(currentWord);
+                        oldNode.addWord(wordIndex);
                         //make this node current node
                         currentNode = oldNode;
 
                     } else {
-                       // p("Creating New Inter. Node for: " + currentCharacter);
                         // create a new node
                         IndexNode tempNode = new IndexNode(currentCharacter);
                         //add word
-                        tempNode.addWord(currentWord);
+                        tempNode.addWord(wordIndex);
                         //add node to currentNode
                         currentNode.addNode(tempNode);
                         //make this current Node
                         currentNode = tempNode;
-                        //release node
-                        tempNode = null;
-
                     }
 
                 }
@@ -105,9 +101,6 @@ public class IndexTreeBuilder {
 
     private void printTree() {
 
-        p("============================");
-        p("Final Tree");
-        p("============================");
         String json = new Gson().toJson(tree);
         p(json);
 
